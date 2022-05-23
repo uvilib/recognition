@@ -98,11 +98,14 @@ function videoDimensions(video) {
 }
 
 async function start(typeRecognition) {
-  await navigator.mediaDevices.getUserMedia(
-    { video: {} },
-    (stream) => (video.srcObject = stream),
-    (err) => console.error(err)
-  );
+  navigator.mediaDevices
+    .getUserMedia({ audio: true, video: true })
+    .then(function (stream) {
+      video.srcObject = stream;
+    })
+    .catch(function (e) {
+      logError(e.name + ": " + e.message);
+    });
 
   switch (typeRecognition) {
     case "expression":
