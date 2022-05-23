@@ -10,7 +10,7 @@ const basePath = path.join(__dirname, "../public");
 const modelsPath = path.join(__dirname, "../public", "/labeled_images/");
 
 var webSocketServer = new WebSocketServer.Server({
-  port: 5000,
+  port: 80,
 });
 
 let labels = [];
