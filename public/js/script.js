@@ -11,16 +11,17 @@ const addModelsBlock = document.getElementById("addModelsBlock");
 const blockModel = document.getElementById("blockModel");
 const inputContainer = document.getElementById("inputContainer");
 const inputContainer2 = document.getElementById("inputContainer2");
-const expressionBlock = document.getElementById("expression");
 const facesVideoBlock = document.getElementById("facesVideo");
 const facesImageBlock = document.getElementById("facesImage");
 const nameModel = document.getElementById("nameModel");
 const btnUpload = document.getElementById("btnUpload");
 const goList = document.getElementById("goList");
 const functionsList = document.getElementsByClassName("function");
+const unknownObj = document.getElementById("unknownObj");
+const unknownBtn = document.getElementById("unknownbtn");
 let videoStop = false;
 
-var socket = new WebSocket("ws://uvilib-message.ru:5000");
+var socket = new WebSocket("ws://localhost:5000");
 
 let labels = [];
 
@@ -44,6 +45,10 @@ btnUpload.addEventListener("click", () => {
   }
 });
 
+unknownBtn.addEventListener("click", () => {
+  unknownObj.style.opacity = "0";
+});
+
 addModelsBlock.addEventListener("click", () => {
   listFunction.style.display = "none";
   blockModel.style.display = "flex";
@@ -52,12 +57,6 @@ addModelsBlock.addEventListener("click", () => {
 
 goList.addEventListener("click", () => {
   location.reload();
-});
-
-expressionBlock.addEventListener("click", () => {
-  listFunction.style.display = "none";
-  containerCanvas.style.display = "block";
-  startPromise("expression");
 });
 
 facesVideoBlock.addEventListener("click", () => {
@@ -136,6 +135,7 @@ async function recognizeFaces() {
     const videoSize = await videoDimensions(video);
     const displaySize = { ...videoSize };
     faceapi.matchDimensions(canvas, displaySize);
+    let isUnknown = false;
     setInterval(async () => {
       const detections = await faceapi
         .detectAllFaces(video)
@@ -146,6 +146,10 @@ async function recognizeFaces() {
       const results = resizedDetections.map((d) => {
         return faceMatcher.findBestMatch(d.descriptor);
       });
+      // console.log(results);
+      results.map((item) => {
+        item._label === "unknown" ? (isUnknown = true) : (isUnknown = false);
+      });
       results.forEach((result, i) => {
         const box = resizedDetections[i].detection.box;
         const drawBox = new faceapi.draw.DrawBox(box, {
@@ -153,6 +157,12 @@ async function recognizeFaces() {
         });
         drawBox.draw(canvas);
       });
+      if (isUnknown) {
+        unknownObj.style.opacity = "1";
+      }
+      if (isUnknown === false) {
+        unknownObj.style.opacity = "0";
+      }
     }, 100);
   });
 }

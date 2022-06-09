@@ -36,13 +36,6 @@
     </div>
     <div class="list-functions" id="list">
       <div class="limiter">
-        <div class="function" id="expression">
-          <div class="title"><span>Распознавание эмоций</span></div>
-          <div class="label">
-            Функция распознает эмоции по выражению лица на видеопотоке, который
-            предоставил пользователь.
-          </div>
-        </div>
         <div class="function" id="facesVideo">
           <div class="title"><span>Распознавание лиц на видео</span></div>
           <div class="label">
@@ -121,6 +114,19 @@
       <span>Укажите название модели</span>
       <input type="text" id="nameModel" />
       <button id="btnUpload">Добавить модель</button>
+    </div>
+
+    <div class="unknown" id="unknownObj">
+      <div class="unknown-title"><h3>Внимание! Неопознанное лицо</h3></div>
+      <div class="unknown-subtitle">
+        <span
+          >Объект, стоящий перед камерой не распознан как известный программе
+          человек</span
+        >
+      </div>
+      <div class="unknown-btn" id="unknownbtn">
+        <button>Принял меры</button>
+      </div>
     </div>
 
     <script defer async src="./js/face-api.min.js"></script>
